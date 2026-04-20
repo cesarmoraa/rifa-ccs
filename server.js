@@ -12,7 +12,7 @@ loadEnvFile(path.join(__dirname, ".env"));
 
 const config = {
   port: Number(process.env.PORT || 3000),
-  host: process.env.HOST || "127.0.0.1",
+  host: process.env.HOST || "0.0.0.0",
   appUrl: process.env.APP_URL || "http://localhost:3000",
   holdMinutes: Number(process.env.HOLD_MINUTES || 30),
   supabaseUrl: requiredEnv("SUPABASE_URL"),
