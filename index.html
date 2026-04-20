@@ -1,0 +1,2408 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rifa Oficial Ciclo Club Santiago</title>
+  <meta name="description" content="Dashboard público de la rifa oficial del Ciclo Club Santiago." />
+  <meta name="theme-color" content="#07131f" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050b12;
+      --bg-soft: #091522;
+      --panel: rgba(8, 19, 31, 0.9);
+      --panel-strong: rgba(5, 14, 24, 0.96);
+      --line: rgba(157, 196, 225, 0.16);
+      --line-strong: rgba(157, 196, 225, 0.28);
+      --text: #f4fbff;
+      --muted: #95acc3;
+      --muted-strong: #c9daea;
+      --brand: #50c9ff;
+      --brand-strong: #0f9fe2;
+      --brand-soft: rgba(80, 201, 255, 0.16);
+      --available: #35c66e;
+      --reserved: #efc14f;
+      --paid: #f04967;
+      --conflict: #8f62ff;
+      --shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --ticket-size: 48px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 14% 12%, rgba(80, 201, 255, 0.16), transparent 24%),
+        radial-gradient(circle at 82% 0%, rgba(15, 159, 226, 0.18), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(19, 44, 70, 0.62), transparent 48%),
+        linear-gradient(180deg, #050b12 0%, #07131f 42%, #04090f 100%);
+      line-height: 1.45;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, black 32%, transparent 100%);
+      opacity: 0.25;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1380px, calc(100vw - 24px));
+      margin: 0 auto;
+      padding: 18px 0 56px;
+    }
+
+    .shell {
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      background:
+        linear-gradient(145deg, rgba(5, 14, 24, 0.98), rgba(10, 25, 39, 0.96)),
+        radial-gradient(circle at top right, rgba(80, 201, 255, 0.16), transparent 42%);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      isolation: isolate;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -90px -120px auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(80, 201, 255, 0.18), transparent 72%);
+      z-index: -1;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.02), transparent 35%, rgba(80, 201, 255, 0.05));
+      z-index: -1;
+    }
+
+    .hero-top {
+      display: grid;
+      gap: 16px;
+    }
+
+    .brand-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .brand-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+      padding: 10px;
+      object-fit: contain;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(80, 201, 255, 0.26);
+      background: rgba(80, 201, 255, 0.1);
+      color: #dff5ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--brand);
+      box-shadow: 0 0 0 5px rgba(80, 201, 255, 0.14);
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 10px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(2rem, 11vw, 4.4rem);
+      line-height: 0.95;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--muted-strong);
+      font-weight: 700;
+    }
+
+    .hero-note {
+      margin: 0;
+      color: var(--muted);
+      max-width: 56ch;
+      font-size: 0.97rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cta,
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 18px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.04rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .cta {
+      color: #03101b;
+      background: linear-gradient(135deg, #b8ecff, #50c9ff 45%, #2398d6 100%);
+      box-shadow: 0 18px 28px rgba(15, 159, 226, 0.28);
+    }
+
+    .cta:hover,
+    .cta:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 32px rgba(15, 159, 226, 0.34);
+    }
+
+    .ghost-btn {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .ghost-btn:hover,
+    .ghost-btn:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(80, 201, 255, 0.45);
+      background: rgba(80, 201, 255, 0.08);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .status-strip,
+    .policy-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted-strong);
+      font-size: 0.9rem;
+    }
+
+    .policy-strip span,
+    .status-strip span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.035);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--brand);
+      box-shadow: 0 0 0 4px rgba(80, 201, 255, 0.16);
+    }
+
+    .alert {
+      display: none;
+      border-radius: 16px;
+      border: 1px solid rgba(239, 193, 79, 0.36);
+      background: rgba(239, 193, 79, 0.13);
+      color: #ffe9aa;
+      padding: 12px 14px;
+      font-size: 0.94rem;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted-strong);
+      font-size: 0.94rem;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      border-top-color: var(--brand);
+      animation: spin 0.72s linear infinite;
+    }
+
+    .dashboard-grid,
+    .detail-grid,
+    .bottom-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      position: relative;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(8, 19, 31, 0.94), rgba(5, 12, 20, 0.98));
+      box-shadow: var(--shadow);
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 24%);
+      pointer-events: none;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .panel-head h2,
+    .panel-head h3,
+    .section-title,
+    .block-title {
+      margin: 0;
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .panel-head h2,
+    .section-title {
+      font-size: 1.35rem;
+    }
+
+    .panel-head h3,
+    .block-title {
+      font-size: 1.12rem;
+    }
+
+    .panel-sub {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .bank-grid,
+    .prize-grid,
+    .kpi-grid,
+    .filters,
+    .summary-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bank-item,
+    .prize-item,
+    .kpi,
+    .info-chip,
+    .detail-card,
+    .timeline-item,
+    .ranking-card,
+    .mini-card,
+    .summary-card {
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .bank-item,
+    .prize-item,
+    .summary-card,
+    .mini-card,
+    .detail-card,
+    .timeline-item {
+      padding: 12px;
+    }
+
+    .bank-label,
+    .kpi-label,
+    .field label,
+    .summary-label,
+    .detail-label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .bank-value,
+    .summary-value,
+    .detail-value {
+      margin-top: 6px;
+      color: var(--text);
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .payment-notes {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .payment-notes p {
+      margin: 0;
+      color: var(--muted-strong);
+      font-size: 0.95rem;
+    }
+
+    .prize-grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .prize-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .prize-item strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .prize-item small {
+      color: var(--muted);
+    }
+
+    .prize-main {
+      border-color: rgba(80, 201, 255, 0.32);
+      background: rgba(80, 201, 255, 0.12);
+    }
+
+    .pill,
+    .state-pill,
+    .tag,
+    .type-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .tag {
+      color: #d8f5ff;
+      border: 1px solid rgba(80, 201, 255, 0.28);
+      background: rgba(80, 201, 255, 0.12);
+    }
+
+    .pill {
+      color: #dff5ff;
+      border: 1px solid rgba(80, 201, 255, 0.26);
+      background: rgba(80, 201, 255, 0.1);
+    }
+
+    .kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .kpi {
+      padding: 14px;
+    }
+
+    .kpi-value {
+      margin-top: 8px;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(1.45rem, 8vw, 2rem);
+      line-height: 1;
+      letter-spacing: 0.03em;
+    }
+
+    .filters {
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(3, 10, 17, 0.86);
+      color: var(--text);
+      padding: 0 14px;
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(80, 201, 255, 0.52);
+      box-shadow: 0 0 0 4px rgba(80, 201, 255, 0.12);
+      background: rgba(5, 14, 24, 0.98);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted-strong);
+      font-size: 0.86rem;
+    }
+
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .swatch.available { background: var(--available); }
+    .swatch.reserved { background: var(--reserved); }
+    .swatch.paid { background: var(--paid); }
+    .swatch.conflict { background: var(--conflict); }
+
+    .filter-result {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      min-height: 1.4em;
+    }
+
+    .map-panel {
+      overflow: visible;
+    }
+
+    .map-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      min-height: 280px;
+    }
+
+    .ticket-btn {
+      position: relative;
+      min-height: var(--ticket-size);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #071018;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-align: center;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, filter 0.16s ease;
+    }
+
+    .ticket-btn:hover,
+    .ticket-btn:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.22);
+      border-color: rgba(255, 255, 255, 0.4);
+      outline: none;
+    }
+
+    .ticket-btn.available { background: var(--available); }
+    .ticket-btn.reserved { background: var(--reserved); }
+    .ticket-btn.paid { background: var(--paid); color: #ffffff; }
+    .ticket-btn.conflict { background: var(--conflict); color: #ffffff; }
+
+    .ticket-btn.active {
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22), 0 16px 28px rgba(0, 0, 0, 0.26);
+      border-color: #ffffff;
+    }
+
+    .empty-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      color: var(--muted);
+      padding: 14px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .selected-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .state-pill.available {
+      color: #bff2d1;
+      background: rgba(53, 198, 110, 0.16);
+      border: 1px solid rgba(53, 198, 110, 0.26);
+    }
+
+    .state-pill.reserved {
+      color: #ffe7a7;
+      background: rgba(239, 193, 79, 0.16);
+      border: 1px solid rgba(239, 193, 79, 0.26);
+    }
+
+    .state-pill.paid {
+      color: #ffd1d8;
+      background: rgba(240, 73, 103, 0.15);
+      border: 1px solid rgba(240, 73, 103, 0.28);
+    }
+
+    .state-pill.conflict {
+      color: #e0d0ff;
+      background: rgba(143, 98, 255, 0.18);
+      border: 1px solid rgba(143, 98, 255, 0.28);
+    }
+
+    .summary-grid,
+    .detail-fields,
+    .timeline-list,
+    .latest-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .summary-grid,
+    .detail-fields {
+      grid-template-columns: 1fr;
+    }
+
+    .detail-fields {
+      display: grid;
+      gap: 10px;
+    }
+
+    .detail-card {
+      display: grid;
+      gap: 4px;
+    }
+
+    .detail-value {
+      font-size: 0.96rem;
+      font-weight: 700;
+    }
+
+    .detail-muted {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .timeline-list,
+    .latest-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-item,
+    .latest-item,
+    .ranking-row {
+      display: grid;
+      gap: 4px;
+    }
+
+    .timeline-top,
+    .latest-top,
+    .ranking-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .timeline-title,
+    .latest-title,
+    .ranking-title {
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .timeline-meta,
+    .latest-meta,
+    .ranking-meta,
+    .timeline-detail {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .mini-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+    }
+
+    .table th,
+    .table td {
+      padding: 11px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      vertical-align: top;
+    }
+
+    .table th {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .table td {
+      color: var(--muted-strong);
+      font-size: 0.92rem;
+    }
+
+    .type-pill.reservation {
+      color: #ffe8b1;
+      background: rgba(239, 193, 79, 0.16);
+      border: 1px solid rgba(239, 193, 79, 0.3);
+    }
+
+    .type-pill.payment {
+      color: #ffd1d8;
+      background: rgba(240, 73, 103, 0.16);
+      border: 1px solid rgba(240, 73, 103, 0.3);
+    }
+
+    .type-pill.control {
+      color: #dff5ff;
+      background: rgba(80, 201, 255, 0.12);
+      border: 1px solid rgba(80, 201, 255, 0.3);
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.84rem;
+      padding-top: 2px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (min-width: 700px) {
+      .page {
+        width: min(1380px, calc(100vw - 36px));
+        padding-top: 20px;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+
+      .hero-top {
+        grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+        align-items: end;
+      }
+
+      .hero-actions {
+        justify-self: end;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .filters {
+        grid-template-columns: 1.1fr 0.9fr auto;
+      }
+
+      .numbers-grid {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+      }
+
+      .detail-grid,
+      .bottom-grid {
+        grid-template-columns: 1.3fr 0.7fr;
+      }
+
+      .summary-grid,
+      .detail-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1040px) {
+      .hero {
+        padding: 28px;
+      }
+
+      .brand-row {
+        grid-template-columns: 88px 1fr;
+      }
+
+      .brand-badge {
+        width: 88px;
+        height: 88px;
+      }
+
+      .numbers-grid {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+      }
+
+      .dashboard-grid {
+        grid-template-columns: minmax(360px, 0.8fr) minmax(0, 1.2fr);
+      }
+
+      .bottom-grid {
+        grid-template-columns: 0.9fr 1.1fr;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      :root {
+        --ticket-size: 54px;
+      }
+
+      .numbers-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="shell">
+      <section class="hero" aria-label="Hero principal de la rifa">
+        <div class="hero-top">
+          <div class="hero-copy">
+            <div class="brand-row">
+              <img src="logo_ccs.png" alt="Logo Ciclo Club Santiago" class="brand-badge" onerror="this.style.display='none'" />
+              <div>
+                <span class="eyebrow">Rifa oficial</span>
+                <h1>Rifa Oficial Ciclo Club Santiago</h1>
+              </div>
+            </div>
+            <p class="hero-subtitle">Valor por número: $10.000 · Pago solo por transferencia bancaria</p>
+            <p class="hero-note">Los vendedores registran reservas. Solo Solange confirma pagos.</p>
+            <div class="policy-strip" aria-label="Políticas de la rifa">
+              <span>Reserva válida por 24 horas</span>
+              <span>Total de números: 300</span>
+              <span>Actualización pública en línea</span>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <button id="buyBtn" type="button" class="cta">Comprar tu número</button>
+            <button id="reloadBtn" type="button" class="ghost-btn">Actualizar datos</button>
+          </div>
+        </div>
+
+        <div class="hero-meta">
+          <div class="status-strip" aria-live="polite">
+            <span><i class="status-dot" aria-hidden="true"></i><strong id="lastUpdate">Cargando información...</strong></span>
+            <span id="statusSummary">Preparando tablero público de la rifa.</span>
+          </div>
+          <div id="loadingBox" class="loading" role="status" aria-live="polite">
+            <span class="spinner" aria-hidden="true"></span>
+            <span>Consultando reservas y validaciones de pago...</span>
+          </div>
+          <div id="errorBanner" class="alert" role="alert"></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid" aria-label="Panel superior de datos e instrucciones">
+        <article class="panel" id="paymentSection">
+          <div class="panel-head">
+            <div>
+              <h2>Datos de Pago</h2>
+              <p class="panel-sub">Transferencia bancaria para reservar y validar tu número.</p>
+            </div>
+            <span class="tag">Pago oficial</span>
+          </div>
+
+          <div class="bank-grid">
+            <div class="bank-item"><span class="bank-label">Titular</span><div class="bank-value">Ciclo Club Santiago</div></div>
+            <div class="bank-item"><span class="bank-label">RUT</span><div class="bank-value">65.039.640-5</div></div>
+            <div class="bank-item"><span class="bank-label">Banco</span><div class="bank-value">Banco BCI</div></div>
+            <div class="bank-item"><span class="bank-label">Tipo de cuenta</span><div class="bank-value">Cuenta Corriente</div></div>
+            <div class="bank-item"><span class="bank-label">Número de cuenta</span><div class="bank-value">86488155</div></div>
+            <div class="bank-item"><span class="bank-label">Correo</span><div class="bank-value">contacto@cicloclub.cl</div></div>
+            <div class="bank-item"><span class="bank-label">Tesorería</span><div class="bank-value">tesorero@cicloclub.cl</div></div>
+            <div class="bank-item"><span class="bank-label">WhatsApp Solange</span><div class="bank-value">+56 9 9847 6783</div></div>
+          </div>
+
+          <div class="payment-notes" aria-label="Instrucciones de pago">
+            <p>Enviar comprobante por WhatsApp a Solange: +56 9 9847 6783</p>
+            <p>En el comentario de la transferencia indicar: número(s) + nombre comprador</p>
+            <p>Ejemplo: Rifa 045 Juan Pérez</p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Premios</h2>
+              <p class="panel-sub">Premios oficiales de la rifa del club.</p>
+            </div>
+            <span class="tag">Sorteo CCS</span>
+          </div>
+
+          <ul class="prize-grid">
+            <li class="prize-item prize-main">
+              <div>
+                <strong>Bicicleta MTB Specialized</strong>
+                <small>Premio principal</small>
+              </div>
+              <span class="tag">Principal</span>
+            </li>
+            <li class="prize-item">
+              <div>
+                <strong>Casco Dux Helm</strong>
+                <small>Premio adicional</small>
+              </div>
+              <span class="tag">Adicional</span>
+            </li>
+            <li class="prize-item">
+              <div>
+                <strong>3 Botellas Garmin</strong>
+                <small>Premio adicional</small>
+              </div>
+              <span class="tag">Adicional</span>
+            </li>
+            <li class="prize-item">
+              <div>
+                <strong>Gorros Oakley / Specialized</strong>
+                <small>Premio adicional</small>
+              </div>
+              <span class="tag">Adicional</span>
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="panel" aria-label="Indicadores y filtros principales">
+        <div class="panel-head">
+          <div>
+            <h2>Estado General</h2>
+            <p class="panel-sub">Monitoreo público de disponibilidad, reservas y pagos confirmados.</p>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <article class="kpi"><span class="kpi-label">Disponibles</span><div id="kpiAvailable" class="kpi-value">300</div></article>
+          <article class="kpi"><span class="kpi-label">Reservados vigentes</span><div id="kpiReserved" class="kpi-value">0</div></article>
+          <article class="kpi"><span class="kpi-label">Pagados confirmados</span><div id="kpiPaid" class="kpi-value">0</div></article>
+          <article class="kpi"><span class="kpi-label">Recaudación confirmada</span><div id="kpiRevenue" class="kpi-value">$0</div></article>
+          <article class="kpi"><span class="kpi-label">Recaudación potencial</span><div id="kpiPotential" class="kpi-value">$3.000.000</div></article>
+          <article class="kpi"><span class="kpi-label">Porcentaje avance</span><div id="kpiProgress" class="kpi-value">0%</div></article>
+        </div>
+
+        <div class="filters" style="margin-top: 14px;">
+          <div class="field">
+            <label for="sellerFilter">Filtro por vendedor</label>
+            <select id="sellerFilter">
+              <option value="ALL">Todos los vendedores</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="numberFilter">Búsqueda por número</label>
+            <input id="numberFilter" type="text" inputmode="numeric" maxlength="3" autocomplete="off" placeholder="Ejemplo: 045" />
+          </div>
+
+          <button id="clearFiltersBtn" type="button" class="ghost-btn">Limpiar filtros</button>
+        </div>
+
+        <div class="legend" aria-label="Leyenda de estados">
+          <span><i class="swatch available" aria-hidden="true"></i>Disponible</span>
+          <span><i class="swatch reserved" aria-hidden="true"></i>Reservado</span>
+          <span><i class="swatch paid" aria-hidden="true"></i>Pagado confirmado</span>
+          <span><i class="swatch conflict" aria-hidden="true"></i>Conflicto</span>
+        </div>
+
+        <div id="filterResult" class="filter-result"></div>
+      </section>
+
+      <section class="panel map-panel" aria-label="Mapa público de números de la rifa">
+        <div class="map-head">
+          <div>
+            <h2 class="section-title">Mapa de Números 001–300</h2>
+            <p class="panel-sub">Haz clic sobre un número para revisar su detalle consolidado.</p>
+          </div>
+          <div id="selectedSummary" class="selected-summary"></div>
+        </div>
+        <div id="numbersGrid" class="numbers-grid"></div>
+      </section>
+
+      <section class="detail-grid" aria-label="Detalle por número y últimos ingresos">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Detalle por Número</h2>
+              <p class="panel-sub">Estado visible, consolidado, validaciones y trazabilidad del número.</p>
+            </div>
+          </div>
+
+          <div id="detailSummary" class="summary-grid"></div>
+          <div id="detailFields" class="detail-fields" style="margin-top: 10px;"></div>
+
+          <div style="margin-top: 16px;">
+            <h3 class="block-title">Historial breve</h3>
+            <ul id="detailTimeline" class="timeline-list" style="margin-top: 10px;"></ul>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Últimos Números Ingresados</h2>
+              <p class="panel-sub">Entradas recientes registradas por los vendedores.</p>
+            </div>
+          </div>
+          <ul id="latestList" class="latest-list"></ul>
+        </article>
+      </section>
+
+      <section class="bottom-grid" aria-label="Ranking y movimientos recientes">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Ranking de Vendedores</h2>
+              <p class="panel-sub">Conteo consolidado de pagados confirmados y reservas vigentes.</p>
+            </div>
+          </div>
+          <div id="rankingList" class="mini-stack"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Últimos Movimientos</h2>
+              <p class="panel-sub" id="movementsSummary">Sin movimientos por ahora.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table" aria-label="Tabla de últimos movimientos">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Número</th>
+                  <th>Tipo</th>
+                  <th>Responsable</th>
+                  <th>Detalle</th>
+                </tr>
+              </thead>
+              <tbody id="movementsBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <p class="footer">Ciclo Club Santiago · Rifa oficial</p>
+    </div>
+  </main>
+
+  <script>
+    const CONFIG = {
+      reservasCSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_SOpm5dqL9wDjFhRApS5BSTsEx3ah5PHjqM_kn-Ow6WeaGX6PHxroxoXRso83iyp1c6QVm3t-5YvV/pub?gid=256948776&single=true&output=csv",
+      controlCSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_SOpm5dqL9wDjFhRApS5BSTsEx3ah5PHjqM_kn-Ow6WeaGX6PHxroxoXRso83iyp1c6QVm3t-5YvV/pub?gid=1755235692&single=true&output=csv",
+      totalNumbers: 300,
+      ticketValue: 10000,
+      reservationHours: 24,
+      mouvementLimit: 30,
+      latestEntriesLimit: 12,
+      timelineLimit: 8
+    };
+
+    const state = {
+      reservations: [],
+      controls: [],
+      tickets: [],
+      ticketIndex: new Map(),
+      movements: [],
+      selectedNumber: null,
+      filters: {
+        seller: "ALL",
+        number: ""
+      },
+      errors: []
+    };
+
+    const dom = {
+      buyBtn: document.getElementById("buyBtn"),
+      reloadBtn: document.getElementById("reloadBtn"),
+      paymentSection: document.getElementById("paymentSection"),
+      loadingBox: document.getElementById("loadingBox"),
+      errorBanner: document.getElementById("errorBanner"),
+      lastUpdate: document.getElementById("lastUpdate"),
+      statusSummary: document.getElementById("statusSummary"),
+      sellerFilter: document.getElementById("sellerFilter"),
+      numberFilter: document.getElementById("numberFilter"),
+      clearFiltersBtn: document.getElementById("clearFiltersBtn"),
+      filterResult: document.getElementById("filterResult"),
+      selectedSummary: document.getElementById("selectedSummary"),
+      numbersGrid: document.getElementById("numbersGrid"),
+      detailSummary: document.getElementById("detailSummary"),
+      detailFields: document.getElementById("detailFields"),
+      detailTimeline: document.getElementById("detailTimeline"),
+      latestList: document.getElementById("latestList"),
+      rankingList: document.getElementById("rankingList"),
+      movementsSummary: document.getElementById("movementsSummary"),
+      movementsBody: document.getElementById("movementsBody"),
+      kpiAvailable: document.getElementById("kpiAvailable"),
+      kpiReserved: document.getElementById("kpiReserved"),
+      kpiPaid: document.getElementById("kpiPaid"),
+      kpiRevenue: document.getElementById("kpiRevenue"),
+      kpiPotential: document.getElementById("kpiPotential"),
+      kpiProgress: document.getElementById("kpiProgress")
+    };
+
+    function normalizeText(value) {
+      return String(value == null ? "" : value)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[“”"'`´]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+    }
+
+    function containsAll(text, terms) {
+      return terms.every((term) => text.includes(term));
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatNumber(number) {
+      return String(number).padStart(3, "0");
+    }
+
+    function normalizeName(value) {
+      return normalizeText(value).replace(/\s+/g, " ").trim();
+    }
+
+    function uniqueNonEmpty(values) {
+      const seen = new Set();
+      const output = [];
+      values.forEach((value) => {
+        const clean = String(value == null ? "" : value).trim();
+        if (!clean) {
+          return;
+        }
+        const key = normalizeName(clean);
+        if (!key || seen.has(key)) {
+          return;
+        }
+        seen.add(key);
+        output.push(clean);
+      });
+      return output;
+    }
+
+    function formatMoney(value) {
+      const amount = Number.isFinite(value) ? value : 0;
+      return new Intl.NumberFormat("es-CL", {
+        style: "currency",
+        currency: "CLP",
+        maximumFractionDigits: 0
+      }).format(amount);
+    }
+
+    function formatDate(date) {
+      if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+        return "Sin registro";
+      }
+      return new Intl.DateTimeFormat("es-CL", {
+        dateStyle: "short",
+        timeStyle: "short"
+      }).format(date);
+    }
+
+    function parseMoney(value) {
+      const raw = String(value == null ? "" : value).trim();
+      if (!raw) {
+        return 0;
+      }
+
+      let clean = raw.replace(/[^\d,.-]/g, "");
+      if (!clean) {
+        return 0;
+      }
+
+      if (clean.includes(",") && clean.includes(".")) {
+        if (clean.lastIndexOf(",") > clean.lastIndexOf(".")) {
+          clean = clean.replace(/\./g, "").replace(",", ".");
+        } else {
+          clean = clean.replace(/,/g, "");
+        }
+      } else if (clean.includes(",")) {
+        const parts = clean.split(",");
+        const last = parts[parts.length - 1];
+        clean = last && last.length === 3 ? clean.replace(/,/g, "") : clean.replace(",", ".");
+      }
+
+      const result = Number(clean);
+      return Number.isFinite(result) ? Math.round(result) : 0;
+    }
+
+    function parseFlexibleDate(input) {
+      const value = String(input == null ? "" : input).trim();
+      if (!value) {
+        return null;
+      }
+
+      const direct = new Date(value);
+      if (!Number.isNaN(direct.getTime())) {
+        return direct;
+      }
+
+      const cleaned = value
+        .replace(/\s+/g, " ")
+        .replace(/a\.?m\.?/gi, "AM")
+        .replace(/p\.?m\.?/gi, "PM")
+        .trim();
+
+      const dmy = cleaned.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})(?:[ T,]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i);
+      if (dmy) {
+        let day = Number.parseInt(dmy[1], 10);
+        let month = Number.parseInt(dmy[2], 10);
+        let year = Number.parseInt(dmy[3], 10);
+        let hour = Number.parseInt(dmy[4] || "0", 10);
+        const minute = Number.parseInt(dmy[5] || "0", 10);
+        const second = Number.parseInt(dmy[6] || "0", 10);
+        const meridiem = String(dmy[7] || "").toUpperCase();
+
+        if (year < 100) {
+          year += 2000;
+        }
+        if (meridiem === "PM" && hour < 12) {
+          hour += 12;
+        }
+        if (meridiem === "AM" && hour === 12) {
+          hour = 0;
+        }
+
+        const date = new Date(year, month - 1, day, hour, minute, second);
+        if (!Number.isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      const ymd = cleaned.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+      if (ymd) {
+        const date = new Date(
+          Number.parseInt(ymd[1], 10),
+          Number.parseInt(ymd[2], 10) - 1,
+          Number.parseInt(ymd[3], 10),
+          Number.parseInt(ymd[4] || "0", 10),
+          Number.parseInt(ymd[5] || "0", 10),
+          Number.parseInt(ymd[6] || "0", 10)
+        );
+        if (!Number.isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      return null;
+    }
+
+    function parseCSV(csvText) {
+      const text = String(csvText || "").replace(/^\uFEFF/, "");
+      const rows = [];
+      let row = [];
+      let field = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+
+        if (inQuotes) {
+          if (char === '"') {
+            if (text[i + 1] === '"') {
+              field += '"';
+              i += 1;
+            } else {
+              inQuotes = false;
+            }
+          } else {
+            field += char;
+          }
+          continue;
+        }
+
+        if (char === '"') {
+          inQuotes = true;
+        } else if (char === ",") {
+          row.push(field);
+          field = "";
+        } else if (char === "\n") {
+          row.push(field);
+          rows.push(row);
+          row = [];
+          field = "";
+        } else if (char === "\r") {
+          continue;
+        } else {
+          field += char;
+        }
+      }
+
+      if (field.length > 0 || row.length > 0) {
+        row.push(field);
+        rows.push(row);
+      }
+
+      if (!rows.length) {
+        return { headers: [], rows: [] };
+      }
+
+      const headers = rows[0].map((header) => String(header == null ? "" : header).trim());
+      const dataRows = rows
+        .slice(1)
+        .filter((item) => item.some((cell) => String(cell == null ? "" : cell).trim() !== ""));
+
+      return { headers, rows: dataRows };
+    }
+
+    function buildHeaderResolver(headers) {
+      const normalized = headers.map((header) => normalizeText(header));
+
+      function findIndices(matchers) {
+        const indices = [];
+        normalized.forEach((header, index) => {
+          if (matchers.some((matcher) => matcher(header))) {
+            indices.push(index);
+          }
+        });
+        return indices;
+      }
+
+      return {
+        first(row, matchers) {
+          const indices = findIndices(matchers);
+          for (const index of indices) {
+            const value = String(row[index] == null ? "" : row[index]).trim();
+            if (value !== "") {
+              return value;
+            }
+          }
+          return "";
+        },
+        all(row, matchers) {
+          const indices = findIndices(matchers);
+          return indices
+            .map((index) => String(row[index] == null ? "" : row[index]).trim())
+            .filter((value) => value !== "");
+        }
+      };
+    }
+
+    function extractTicketNumbers(value) {
+      const raw = String(value == null ? "" : value).trim();
+      if (!raw) {
+        return [];
+      }
+
+      const numbers = [];
+      const seen = new Set();
+      const matches = raw.match(/\d{1,3}/g) || [];
+
+      matches.forEach((fragment) => {
+        const number = Number.parseInt(fragment, 10);
+        if (!Number.isFinite(number)) {
+          return;
+        }
+        if (number < 1 || number > CONFIG.totalNumbers) {
+          return;
+        }
+        if (!seen.has(number)) {
+          seen.add(number);
+          numbers.push(number);
+        }
+      });
+
+      return numbers;
+    }
+
+    function resolveSeller(optionValue, otherValue) {
+      const option = String(optionValue == null ? "" : optionValue).trim();
+      const other = String(otherValue == null ? "" : otherValue).trim();
+      const optionKey = normalizeName(option);
+
+      if (!option && other) {
+        return other;
+      }
+      if (optionKey === "otro" || optionKey === "otra" || optionKey.includes("otro")) {
+        return other || option || "Sin vendedor";
+      }
+      return option || other || "Sin vendedor";
+    }
+
+    function parseReservations(csvData) {
+      if (!csvData.headers.length) {
+        return [];
+      }
+
+      const resolver = buildHeaderResolver(csvData.headers);
+      const entries = [];
+
+      csvData.rows.forEach((row, rowIndex) => {
+        const numberCell = resolver.first(row, [
+          (header) => containsAll(header, ["numero", "rifa"]),
+          (header) => header === "numero",
+          (header) => containsAll(header, ["rifa", "numero"])
+        ]);
+
+        const numbers = extractTicketNumbers(numberCell);
+        if (!numbers.length) {
+          return;
+        }
+
+        const timestampRaw = resolver.first(row, [
+          (header) => containsAll(header, ["marca", "temporal"]),
+          (header) => containsAll(header, ["fecha", "hora"]),
+          (header) => containsAll(header, ["timestamp"])
+        ]);
+
+        const buyer = resolver.first(row, [
+          (header) => containsAll(header, ["nombre", "quien", "compra"]),
+          (header) => containsAll(header, ["nombre", "compra"]),
+          (header) => containsAll(header, ["comprador"])
+        ]);
+
+        const phone = resolver.first(row, [
+          (header) => containsAll(header, ["telefono", "comprador"]),
+          (header) => containsAll(header, ["telefono"]),
+          (header) => containsAll(header, ["fono"]),
+          (header) => containsAll(header, ["whatsapp"])
+        ]);
+
+        const sellerOption = resolver.first(row, [
+          (header) => containsAll(header, ["quien", "vende", "numero"]),
+          (header) => containsAll(header, ["vende", "numero"]),
+          (header) => containsAll(header, ["vendedor"])
+        ]);
+
+        const sellerOther = resolver.first(row, [
+          (header) => containsAll(header, ["nombre", "apellido", "vendedor"]),
+          (header) => containsAll(header, ["nombre", "vendedor"])
+        ]);
+
+        const commentParts = uniqueNonEmpty(resolver.all(row, [
+          (header) => containsAll(header, ["comentario"]),
+          (header) => containsAll(header, ["observacion"]),
+          (header) => containsAll(header, ["detalle"])
+        ]));
+
+        const date = parseFlexibleDate(timestampRaw);
+        const seller = resolveSeller(sellerOption, sellerOther);
+        const comment = commentParts.join(" · ");
+        const sortMs = date ? date.getTime() : rowIndex;
+
+        numbers.forEach((number) => {
+          entries.push({
+            source: "reservation",
+            rowIndex,
+            number,
+            numberLabel: formatNumber(number),
+            rawNumbers: String(numberCell || "").trim(),
+            buyer: String(buyer || "").trim(),
+            phone: String(phone || "").trim(),
+            seller,
+            comment,
+            timestampRaw: String(timestampRaw || "").trim(),
+            date,
+            sortMs
+          });
+        });
+      });
+
+      return entries.sort((a, b) => b.sortMs - a.sortMs);
+    }
+
+    function isNegativeState(stateValue) {
+      const value = normalizeName(stateValue);
+      if (!value) {
+        return false;
+      }
+      return value.includes("rechaz") || value.includes("anulad") || value.includes("devol") || value.includes("no valid");
+    }
+
+    function isConfirmedState(stateValue, amount, date) {
+      const value = normalizeName(stateValue);
+      if (!value) {
+        return amount > 0 && !!date;
+      }
+      if (value.includes("pendient") || value.includes("revision") || value.includes("rechaz") || value.includes("anulad")) {
+        return false;
+      }
+      if (
+        value.includes("pagado") ||
+        value.includes("confirm") ||
+        value.includes("validado") ||
+        value.includes("aprobado") ||
+        value === "ok" ||
+        value === "si" ||
+        value === "s"
+      ) {
+        return true;
+      }
+      return amount > 0 && !!date;
+    }
+
+    function parseControls(csvData) {
+      if (!csvData.headers.length) {
+        return [];
+      }
+
+      const resolver = buildHeaderResolver(csvData.headers);
+      const entries = [];
+
+      csvData.rows.forEach((row, rowIndex) => {
+        const numberCell = resolver.first(row, [
+          (header) => header === "numero",
+          (header) => containsAll(header, ["numero"])
+        ]);
+
+        const numbers = extractTicketNumbers(numberCell);
+        if (!numbers.length) {
+          return;
+        }
+
+        const statusRaw = resolver.first(row, [
+          (header) => containsAll(header, ["estado", "validado"]),
+          (header) => header.startsWith("estado"),
+          (header) => containsAll(header, ["validado"])
+        ]);
+
+        const dateRaw = resolver.first(row, [
+          (header) => containsAll(header, ["fecha", "validacion"]),
+          (header) => containsAll(header, ["fecha"])
+        ]);
+
+        const amountRaw = resolver.first(row, [
+          (header) => containsAll(header, ["monto", "recibido"]),
+          (header) => containsAll(header, ["monto"])
+        ]);
+
+        const holder = resolver.first(row, [
+          (header) => containsAll(header, ["nombre", "titular", "transferencia"]),
+          (header) => containsAll(header, ["titular"]),
+          (header) => containsAll(header, ["nombre", "transferencia"])
+        ]);
+
+        const observationParts = uniqueNonEmpty(resolver.all(row, [
+          (header) => containsAll(header, ["observacion", "tesoreria"]),
+          (header) => containsAll(header, ["observacion"]),
+          (header) => containsAll(header, ["comentario"])
+        ]));
+
+        const date = parseFlexibleDate(dateRaw);
+        const amount = parseMoney(amountRaw);
+        const confirmed = isConfirmedState(statusRaw, amount, date);
+        const negative = isNegativeState(statusRaw);
+        const observation = observationParts.join(" · ");
+        const sortMs = date ? date.getTime() : rowIndex;
+
+        numbers.forEach((number) => {
+          entries.push({
+            source: "control",
+            rowIndex,
+            number,
+            numberLabel: formatNumber(number),
+            statusRaw: String(statusRaw || "").trim(),
+            dateRaw: String(dateRaw || "").trim(),
+            date,
+            amount,
+            holder: String(holder || "").trim(),
+            observation,
+            confirmed,
+            negative,
+            sortMs
+          });
+        });
+      });
+
+      return entries.sort((a, b) => b.sortMs - a.sortMs);
+    }
+
+    function reservationIsActive(reservation) {
+      if (!(reservation && reservation.date instanceof Date) || Number.isNaN(reservation.date.getTime())) {
+        return true;
+      }
+      const age = Date.now() - reservation.date.getTime();
+      return age >= -5 * 60 * 1000 && age <= CONFIG.reservationHours * 60 * 60 * 1000;
+    }
+
+    function computeReservationExpiry(reservation) {
+      if (!(reservation && reservation.date instanceof Date) || Number.isNaN(reservation.date.getTime())) {
+        return null;
+      }
+      return new Date(reservation.date.getTime() + CONFIG.reservationHours * 60 * 60 * 1000);
+    }
+
+    function getStatusClass(status) {
+      if (status === "Reservado") {
+        return "reserved";
+      }
+      if (status === "Pagado confirmado") {
+        return "paid";
+      }
+      if (status === "Conflicto") {
+        return "conflict";
+      }
+      return "available";
+    }
+
+    function buildTicketModel() {
+      const reservationsByNumber = new Map();
+      const controlsByNumber = new Map();
+
+      state.reservations.forEach((reservation) => {
+        if (!reservationsByNumber.has(reservation.number)) {
+          reservationsByNumber.set(reservation.number, []);
+        }
+        reservationsByNumber.get(reservation.number).push(reservation);
+      });
+
+      state.controls.forEach((control) => {
+        if (!controlsByNumber.has(control.number)) {
+          controlsByNumber.set(control.number, []);
+        }
+        controlsByNumber.get(control.number).push(control);
+      });
+
+      const tickets = [];
+      const ticketIndex = new Map();
+
+      for (let number = 1; number <= CONFIG.totalNumbers; number += 1) {
+        const reservations = (reservationsByNumber.get(number) || []).slice().sort((a, b) => b.sortMs - a.sortMs);
+        const controls = (controlsByNumber.get(number) || []).slice().sort((a, b) => b.sortMs - a.sortMs);
+
+        const latestReservation = reservations[0] || null;
+        const activeReservations = reservations.filter(reservationIsActive);
+        const latestActiveReservation = activeReservations[0] || null;
+        const confirmedControls = controls.filter((control) => control.confirmed);
+        const latestConfirmedControl = confirmedControls[0] || null;
+        const latestControl = controls[0] || null;
+        const reservationExpiry = computeReservationExpiry(latestActiveReservation || latestReservation);
+
+        const conflictReasons = [];
+
+        if (activeReservations.length > 1) {
+          const signatures = new Set(activeReservations.map((entry) => {
+            return [normalizeName(entry.buyer), normalizeName(entry.phone), normalizeName(entry.seller)].join("|");
+          }));
+          if (signatures.size > 1) {
+            conflictReasons.push("Múltiples reservas vigentes con datos distintos");
+          }
+        }
+
+        if (confirmedControls.length > 1) {
+          const signatures = new Set(confirmedControls.map((entry) => {
+            return [String(entry.amount || 0), normalizeName(entry.holder), normalizeName(entry.observation)].join("|");
+          }));
+          if (signatures.size > 1) {
+            conflictReasons.push("Confirmaciones de pago duplicadas con diferencias");
+          }
+        }
+
+        if (controls.some((control) => control.negative) && latestConfirmedControl) {
+          conflictReasons.push("Tesorería registra estados contradictorios para el mismo número");
+        }
+
+        if (latestConfirmedControl && latestActiveReservation && latestConfirmedControl.date && latestActiveReservation.date) {
+          const reservationAfterPayment = latestActiveReservation.date.getTime() > latestConfirmedControl.date.getTime() + 60000;
+          const namesDiffer =
+            normalizeName(latestConfirmedControl.holder) &&
+            normalizeName(latestActiveReservation.buyer) &&
+            normalizeName(latestConfirmedControl.holder) !== normalizeName(latestActiveReservation.buyer);
+
+          if (reservationAfterPayment && namesDiffer) {
+            conflictReasons.push("Existe una reserva posterior al pago con comprador distinto");
+          }
+        }
+
+        let consolidatedStatus = "Disponible";
+        if (latestConfirmedControl) {
+          consolidatedStatus = "Pagado confirmado";
+        } else if (latestActiveReservation) {
+          consolidatedStatus = "Reservado";
+        }
+
+        if (conflictReasons.length > 0) {
+          consolidatedStatus = "Conflicto";
+        }
+
+        const baseReservation = latestActiveReservation || latestReservation;
+        const currentBuyer = (baseReservation && baseReservation.buyer) || (latestConfirmedControl && latestConfirmedControl.holder) || "Sin registro";
+        const currentSeller = (baseReservation && baseReservation.seller) || "Sin vendedor";
+        const currentPhone = (baseReservation && baseReservation.phone) || "Sin registro";
+        const reserveStateLabel = latestActiveReservation
+          ? "Sí"
+          : latestReservation
+            ? "No, vencida"
+            : "No";
+        const comments = uniqueNonEmpty([
+          baseReservation && baseReservation.comment,
+          latestConfirmedControl && latestConfirmedControl.observation,
+          latestControl && latestControl.observation
+        ]).join(" · ");
+
+        const history = [];
+        reservations.forEach((reservation) => {
+          history.push({
+            date: reservation.date,
+            sortMs: reservation.sortMs,
+            type: "Reserva",
+            typeClass: "reservation",
+            title: `Reserva registrada por ${reservation.seller || "Sin vendedor"}`,
+            detail: [reservation.buyer || "Sin nombre", reservation.phone || "Sin teléfono", reservation.comment || ""].filter(Boolean).join(" · ")
+          });
+        });
+        controls.forEach((control) => {
+          const type = control.confirmed ? "Pago confirmado" : "Control de tesorería";
+          history.push({
+            date: control.date,
+            sortMs: control.sortMs,
+            type,
+            typeClass: control.confirmed ? "payment" : "control",
+            title: control.confirmed ? "Pago confirmado por Solange" : "Actualización de tesorería",
+            detail: [control.holder || "Sin titular", control.amount > 0 ? formatMoney(control.amount) : "", control.observation || control.statusRaw || ""].filter(Boolean).join(" · ")
+          });
+        });
+        history.sort((a, b) => b.sortMs - a.sortMs);
+
+        const lastSort = Math.max(
+          reservations[0] ? reservations[0].sortMs : Number.NEGATIVE_INFINITY,
+          controls[0] ? controls[0].sortMs : Number.NEGATIVE_INFINITY
+        );
+
+        const ticket = {
+          number,
+          numberLabel: formatNumber(number),
+          status: consolidatedStatus,
+          statusVisual: consolidatedStatus,
+          statusConsolidated: consolidatedStatus === "Reservado" ? "Reservado vigente" : consolidatedStatus,
+          buyer: currentBuyer,
+          seller: currentSeller,
+          phone: currentPhone,
+          comments,
+          reservations,
+          activeReservations,
+          latestReservation,
+          latestActiveReservation,
+          controls,
+          latestControl,
+          latestConfirmedControl,
+          paidAmount: latestConfirmedControl ? (latestConfirmedControl.amount > 0 ? latestConfirmedControl.amount : CONFIG.ticketValue) : 0,
+          reserveStateLabel,
+          reservationExpiry,
+          conflictReasons,
+          history: history.slice(0, CONFIG.timelineLimit),
+          lastSort
+        };
+
+        tickets.push(ticket);
+        ticketIndex.set(number, ticket);
+      }
+
+      state.tickets = tickets;
+      state.ticketIndex = ticketIndex;
+    }
+
+    function buildMovements() {
+      const movements = [];
+
+      state.reservations.forEach((reservation) => {
+        movements.push({
+          number: reservation.number,
+          numberLabel: reservation.numberLabel,
+          date: reservation.date,
+          sortMs: reservation.sortMs,
+          type: "Reserva",
+          typeClass: "reservation",
+          responsible: reservation.seller || "Sin vendedor",
+          detail: [reservation.buyer || "Sin nombre", reservation.phone || "Sin teléfono", reservation.comment || ""].filter(Boolean).join(" · ")
+        });
+      });
+
+      state.controls.forEach((control) => {
+        const type = control.confirmed ? "Pago confirmado" : "Control de tesorería";
+        movements.push({
+          number: control.number,
+          numberLabel: control.numberLabel,
+          date: control.date,
+          sortMs: control.sortMs,
+          type,
+          typeClass: control.confirmed ? "payment" : "control",
+          responsible: control.confirmed ? "Solange" : "Tesorería",
+          detail: [control.holder || "Sin titular", control.amount > 0 ? formatMoney(control.amount) : "", control.observation || control.statusRaw || "Sin detalle"].filter(Boolean).join(" · ")
+        });
+      });
+
+      state.movements = movements.sort((a, b) => b.sortMs - a.sortMs);
+    }
+
+    function ticketMatchesFilters(ticket) {
+      if (state.filters.seller !== "ALL" && normalizeName(ticket.seller) !== normalizeName(state.filters.seller)) {
+        return false;
+      }
+
+      if (state.filters.number) {
+        const target = Number.parseInt(state.filters.number, 10);
+        if (!Number.isFinite(target) || ticket.number !== target) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function movementMatchesFilters(movement) {
+      if (state.filters.number) {
+        const target = Number.parseInt(state.filters.number, 10);
+        if (!Number.isFinite(target) || movement.number !== target) {
+          return false;
+        }
+      }
+
+      if (state.filters.seller === "ALL") {
+        return true;
+      }
+
+      if (movement.type === "Reserva") {
+        return normalizeName(movement.responsible) === normalizeName(state.filters.seller);
+      }
+
+      const ticket = state.ticketIndex.get(movement.number);
+      return !!ticket && normalizeName(ticket.seller) === normalizeName(state.filters.seller);
+    }
+
+    function ensureValidSelectedNumber() {
+      if (!state.selectedNumber) {
+        return;
+      }
+      const ticket = state.ticketIndex.get(state.selectedNumber);
+      if (!ticket || !ticketMatchesFilters(ticket)) {
+        state.selectedNumber = null;
+      }
+    }
+
+    function renderKPIs() {
+      let available = 0;
+      let reserved = 0;
+      let paid = 0;
+      let revenue = 0;
+
+      state.tickets.forEach((ticket) => {
+        if (ticket.status === "Disponible") {
+          available += 1;
+        } else if (ticket.status === "Reservado") {
+          reserved += 1;
+        } else if (ticket.status === "Pagado confirmado") {
+          paid += 1;
+          revenue += ticket.paidAmount || CONFIG.ticketValue;
+        } else if (ticket.status === "Conflicto") {
+          revenue += ticket.latestConfirmedControl ? (ticket.paidAmount || CONFIG.ticketValue) : 0;
+        }
+      });
+
+      const potential = CONFIG.totalNumbers * CONFIG.ticketValue;
+      const progress = potential > 0 ? Math.min((revenue / potential) * 100, 100) : 0;
+
+      dom.kpiAvailable.textContent = String(available);
+      dom.kpiReserved.textContent = String(reserved);
+      dom.kpiPaid.textContent = String(paid);
+      dom.kpiRevenue.textContent = formatMoney(revenue);
+      dom.kpiPotential.textContent = formatMoney(potential);
+      dom.kpiProgress.textContent = `${progress.toFixed(1)}%`;
+
+      const conflictCount = state.tickets.filter((ticket) => ticket.status === "Conflicto").length;
+      dom.statusSummary.textContent = conflictCount > 0
+        ? `${paid} pagos confirmados, ${reserved} reservas vigentes y ${conflictCount} conflictos detectados.`
+        : `${paid} pagos confirmados y ${reserved} reservas vigentes al momento.`;
+    }
+
+    function populateSellerFilter() {
+      const sellers = Array.from(new Set(
+        state.reservations
+          .map((reservation) => String(reservation.seller || "").trim())
+          .filter((seller) => seller && seller !== "Sin vendedor")
+      )).sort((a, b) => a.localeCompare(b, "es"));
+
+      const current = state.filters.seller;
+      dom.sellerFilter.innerHTML = '<option value="ALL">Todos los vendedores</option>';
+      sellers.forEach((seller) => {
+        const option = document.createElement("option");
+        option.value = seller;
+        option.textContent = seller;
+        dom.sellerFilter.appendChild(option);
+      });
+
+      if (current !== "ALL" && sellers.includes(current)) {
+        dom.sellerFilter.value = current;
+      } else {
+        state.filters.seller = "ALL";
+        dom.sellerFilter.value = "ALL";
+      }
+    }
+
+    function renderMap() {
+      dom.numbersGrid.innerHTML = "";
+      const visibleTickets = state.tickets.filter(ticketMatchesFilters);
+
+      visibleTickets.forEach((ticket) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `ticket-btn ${getStatusClass(ticket.status)}${state.selectedNumber === ticket.number ? " active" : ""}`;
+        button.textContent = ticket.numberLabel;
+        button.setAttribute("aria-label", `Número ${ticket.numberLabel}, estado ${ticket.status}`);
+        button.addEventListener("click", () => {
+          state.selectedNumber = ticket.number;
+          renderMap();
+          renderDetail();
+        });
+        dom.numbersGrid.appendChild(button);
+      });
+
+      if (!visibleTickets.length) {
+        dom.numbersGrid.innerHTML = '<div class="empty-state">No hay números que coincidan con el filtro actual.</div>';
+      }
+
+      const filterParts = [];
+      if (state.filters.seller !== "ALL") {
+        filterParts.push(`vendedor ${state.filters.seller}`);
+      }
+      if (state.filters.number) {
+        filterParts.push(`número ${formatNumber(Number.parseInt(state.filters.number, 10))}`);
+      }
+
+      dom.filterResult.textContent = filterParts.length
+        ? `Mostrando ${visibleTickets.length} de ${CONFIG.totalNumbers} números para ${filterParts.join(" y ")}.`
+        : `Mostrando ${CONFIG.totalNumbers} números.`;
+
+      renderSelectedSummary();
+    }
+
+    function renderSelectedSummary() {
+      if (!state.selectedNumber || !state.ticketIndex.has(state.selectedNumber)) {
+        dom.selectedSummary.innerHTML = '<span class="pill">Selecciona un número</span>';
+        return;
+      }
+
+      const ticket = state.ticketIndex.get(state.selectedNumber);
+      dom.selectedSummary.innerHTML = `
+        <span class="pill">N° ${escapeHtml(ticket.numberLabel)}</span>
+        <span class="state-pill ${getStatusClass(ticket.status)}">${escapeHtml(ticket.status)}</span>
+      `;
+    }
+
+    function renderDetail() {
+      if (!state.selectedNumber || !state.ticketIndex.has(state.selectedNumber)) {
+        dom.detailSummary.innerHTML = '<div class="empty-state">Selecciona un número del mapa para revisar su detalle.</div>';
+        dom.detailFields.innerHTML = '';
+        dom.detailTimeline.innerHTML = '<li class="empty-state">El historial aparecerá aquí cuando selecciones un número.</li>';
+        return;
+      }
+
+      const ticket = state.ticketIndex.get(state.selectedNumber);
+      const stateClass = getStatusClass(ticket.status);
+      const latestValidationDate = ticket.latestControl ? formatDate(ticket.latestControl.date) : "Sin registro";
+      const validatedAmount = ticket.latestConfirmedControl ? formatMoney(ticket.paidAmount || CONFIG.ticketValue) : "Sin registro";
+      const transferHolder = ticket.latestConfirmedControl ? (ticket.latestConfirmedControl.holder || "Sin registro") : (ticket.latestControl ? ticket.latestControl.holder || "Sin registro" : "Sin registro");
+      const observation = uniqueNonEmpty([
+        ticket.latestControl && ticket.latestControl.observation,
+        ticket.comments
+      ]).join(" · ") || "Sin observaciones";
+      const expiryLabel = ticket.latestActiveReservation
+        ? (ticket.reservationExpiry ? formatDate(ticket.reservationExpiry) : "Reserva vigente sin marca temporal")
+        : ticket.latestReservation
+          ? (ticket.reservationExpiry ? formatDate(ticket.reservationExpiry) : "Sin marca temporal")
+          : "Sin reserva";
+      const conflictsLabel = ticket.conflictReasons.length ? ticket.conflictReasons.join(" · ") : "Sin conflictos";
+
+      dom.detailSummary.innerHTML = `
+        <div class="summary-card">
+          <span class="summary-label">Número</span>
+          <div class="summary-value">${escapeHtml(ticket.numberLabel)}</div>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Estado visual</span>
+          <div class="summary-value"><span class="state-pill ${stateClass}">${escapeHtml(ticket.statusVisual)}</span></div>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Estado consolidado</span>
+          <div class="summary-value">${escapeHtml(ticket.statusConsolidated)}</div>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Conflictos</span>
+          <div class="summary-value">${escapeHtml(ticket.conflictReasons.length ? String(ticket.conflictReasons.length) : "0")}</div>
+        </div>
+      `;
+
+      const cards = [
+        { label: "Comprador actual", value: ticket.buyer || "Sin registro" },
+        { label: "Vendedor actual", value: ticket.seller || "Sin vendedor" },
+        { label: "Teléfono", value: ticket.phone || "Sin registro" },
+        { label: "Reserva vigente", value: ticket.reserveStateLabel },
+        { label: "Vencimiento de reserva", value: expiryLabel },
+        { label: "Última validación de Solange", value: latestValidationDate },
+        { label: "Monto validado", value: validatedAmount },
+        { label: "Titular transferencia", value: transferHolder },
+        { label: "Observación", value: observation },
+        { label: "Conflictos", value: conflictsLabel }
+      ];
+
+      dom.detailFields.innerHTML = cards.map((item) => {
+        return `
+          <li class="detail-card">
+            <span class="detail-label">${escapeHtml(item.label)}</span>
+            <div class="detail-value">${escapeHtml(item.value)}</div>
+          </li>
+        `;
+      }).join("");
+
+      if (!ticket.history.length) {
+        dom.detailTimeline.innerHTML = '<li class="empty-state">Este número todavía no tiene movimientos registrados.</li>';
+        return;
+      }
+
+      dom.detailTimeline.innerHTML = ticket.history.map((entry) => {
+        return `
+          <li class="timeline-item">
+            <div class="timeline-top">
+              <div>
+                <div class="timeline-title">${escapeHtml(entry.title)}</div>
+                <div class="timeline-meta">${escapeHtml(formatDate(entry.date))}</div>
+              </div>
+              <span class="type-pill ${escapeHtml(entry.typeClass)}">${escapeHtml(entry.type)}</span>
+            </div>
+            <div class="timeline-detail">${escapeHtml(entry.detail || "Sin detalle")}</div>
+          </li>
+        `;
+      }).join("");
+    }
+
+    function renderLatestEntries() {
+      const entries = state.reservations.filter((reservation) => {
+        const ticket = state.ticketIndex.get(reservation.number);
+        return ticket ? ticketMatchesFilters(ticket) : false;
+      }).slice(0, CONFIG.latestEntriesLimit);
+
+      if (!entries.length) {
+        dom.latestList.innerHTML = '<li class="empty-state">No hay ingresos recientes para el filtro actual.</li>';
+        return;
+      }
+
+      dom.latestList.innerHTML = entries.map((entry) => {
+        const ticket = state.ticketIndex.get(entry.number);
+        const status = ticket ? ticket.status : "Disponible";
+        return `
+          <li class="mini-card latest-item">
+            <div class="latest-top">
+              <div>
+                <div class="latest-title">N° ${escapeHtml(entry.numberLabel)} · ${escapeHtml(entry.buyer || "Sin nombre")}</div>
+                <div class="latest-meta">${escapeHtml(entry.seller || "Sin vendedor")}</div>
+              </div>
+              <span class="state-pill ${getStatusClass(status)}">${escapeHtml(status)}</span>
+            </div>
+            <div class="latest-meta">${escapeHtml(formatDate(entry.date))}</div>
+          </li>
+        `;
+      }).join("");
+    }
+
+    function renderRanking() {
+      const ranking = new Map();
+
+      state.tickets.forEach((ticket) => {
+        if (!ticketMatchesFilters(ticket)) {
+          return;
+        }
+        if (!ticket.seller || ticket.seller === "Sin vendedor") {
+          return;
+        }
+
+        if (!ranking.has(ticket.seller)) {
+          ranking.set(ticket.seller, {
+            seller: ticket.seller,
+            paid: 0,
+            reserved: 0,
+            amount: 0
+          });
+        }
+
+        const row = ranking.get(ticket.seller);
+        if (ticket.status === "Pagado confirmado") {
+          row.paid += 1;
+          row.amount += ticket.paidAmount || CONFIG.ticketValue;
+        } else if (ticket.status === "Reservado") {
+          row.reserved += 1;
+        }
+      });
+
+      const rows = Array.from(ranking.values()).sort((a, b) => {
+        if (b.paid !== a.paid) {
+          return b.paid - a.paid;
+        }
+        if (b.reserved !== a.reserved) {
+          return b.reserved - a.reserved;
+        }
+        return a.seller.localeCompare(b.seller, "es");
+      });
+
+      if (!rows.length) {
+        dom.rankingList.innerHTML = '<div class="empty-state">No hay vendedores para el filtro actual.</div>';
+        return;
+      }
+
+      dom.rankingList.innerHTML = rows.map((row, index) => {
+        return `
+          <article class="mini-card ranking-row">
+            <div class="ranking-top">
+              <div>
+                <div class="ranking-title">${index + 1}. ${escapeHtml(row.seller)}</div>
+                <div class="ranking-meta">${row.paid} pagados confirmados · ${row.reserved} reservados vigentes</div>
+              </div>
+              <div class="ranking-title">${escapeHtml(formatMoney(row.amount))}</div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderMovements() {
+      const rows = state.movements.filter(movementMatchesFilters).slice(0, CONFIG.mouvementLimit);
+
+      if (!rows.length) {
+        dom.movementsBody.innerHTML = '<tr><td colspan="5">No hay movimientos para el filtro actual.</td></tr>';
+        dom.movementsSummary.textContent = "No hay movimientos para el filtro actual.";
+        return;
+      }
+
+      const reservationCount = rows.filter((row) => row.type === "Reserva").length;
+      const paymentCount = rows.filter((row) => row.type === "Pago confirmado").length;
+      const controlCount = rows.length - reservationCount - paymentCount;
+      dom.movementsSummary.textContent = `Últimos ${rows.length} movimientos: ${reservationCount} reservas, ${paymentCount} pagos confirmados y ${controlCount} registros de tesorería.`;
+
+      dom.movementsBody.innerHTML = rows.map((row) => {
+        return `
+          <tr>
+            <td>${escapeHtml(formatDate(row.date))}</td>
+            <td>${escapeHtml(row.numberLabel)}</td>
+            <td><span class="type-pill ${escapeHtml(row.typeClass)}">${escapeHtml(row.type)}</span></td>
+            <td>${escapeHtml(row.responsible)}</td>
+            <td>${escapeHtml(row.detail || "Sin detalle")}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderAll() {
+      ensureValidSelectedNumber();
+      renderKPIs();
+      renderMap();
+      renderDetail();
+      renderLatestEntries();
+      renderRanking();
+      renderMovements();
+    }
+
+    function showErrors(errors) {
+      if (!errors.length) {
+        dom.errorBanner.style.display = "none";
+        dom.errorBanner.textContent = "";
+        return;
+      }
+
+      dom.errorBanner.style.display = "block";
+      dom.errorBanner.textContent = `No fue posible cargar una o más fuentes de datos. El tablero sigue operativo con la información disponible. ${errors.join(" | ")}`;
+    }
+
+    function setLoading(isLoading) {
+      dom.loadingBox.style.display = isLoading ? "inline-flex" : "none";
+      dom.reloadBtn.disabled = isLoading;
+      dom.reloadBtn.style.opacity = isLoading ? "0.72" : "1";
+    }
+
+    async function fetchCSV(url) {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return parseCSV(await response.text());
+    }
+
+    function seedEmptyTickets() {
+      state.tickets = [];
+      state.ticketIndex = new Map();
+
+      for (let number = 1; number <= CONFIG.totalNumbers; number += 1) {
+        const ticket = {
+          number,
+          numberLabel: formatNumber(number),
+          status: "Disponible",
+          statusVisual: "Disponible",
+          statusConsolidated: "Disponible",
+          buyer: "Sin registro",
+          seller: "Sin vendedor",
+          phone: "Sin registro",
+          comments: "",
+          reservations: [],
+          activeReservations: [],
+          latestReservation: null,
+          latestActiveReservation: null,
+          controls: [],
+          latestControl: null,
+          latestConfirmedControl: null,
+          paidAmount: 0,
+          reserveStateLabel: "No",
+          reservationExpiry: null,
+          conflictReasons: [],
+          history: [],
+          lastSort: Number.NEGATIVE_INFINITY
+        };
+        state.tickets.push(ticket);
+        state.ticketIndex.set(number, ticket);
+      }
+    }
+
+    async function loadDashboardData() {
+      setLoading(true);
+      state.errors = [];
+
+      try {
+        const [reservasResult, controlResult] = await Promise.allSettled([
+          fetchCSV(CONFIG.reservasCSV),
+          fetchCSV(CONFIG.controlCSV)
+        ]);
+
+        const reservasCSV = reservasResult.status === "fulfilled" ? reservasResult.value : { headers: [], rows: [] };
+        const controlCSV = controlResult.status === "fulfilled" ? controlResult.value : { headers: [], rows: [] };
+
+        if (reservasResult.status === "rejected") {
+          state.errors.push(`Reservas: ${reservasResult.reason && reservasResult.reason.message ? reservasResult.reason.message : "error"}`);
+        }
+        if (controlResult.status === "rejected") {
+          state.errors.push(`Control Solange: ${controlResult.reason && controlResult.reason.message ? controlResult.reason.message : "error"}`);
+        }
+
+        state.reservations = parseReservations(reservasCSV);
+        state.controls = parseControls(controlCSV);
+        buildTicketModel();
+        buildMovements();
+        populateSellerFilter();
+
+        if (!state.selectedNumber) {
+          const firstRelevant = state.tickets.find((ticket) => ticket.status !== "Disponible");
+          state.selectedNumber = firstRelevant ? firstRelevant.number : null;
+        }
+
+        showErrors(state.errors);
+        renderAll();
+        dom.lastUpdate.textContent = `Actualizado: ${formatDate(new Date())}`;
+      } catch (error) {
+        state.errors = [error && error.message ? error.message : "Error inesperado"];
+        showErrors(state.errors);
+        state.reservations = [];
+        state.controls = [];
+        seedEmptyTickets();
+        buildMovements();
+        populateSellerFilter();
+        renderAll();
+        dom.lastUpdate.textContent = "No se pudo actualizar la información";
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function applyFilters() {
+      state.filters.seller = dom.sellerFilter.value || "ALL";
+      state.filters.number = String(dom.numberFilter.value || "").replace(/\D/g, "").slice(0, 3);
+      dom.numberFilter.value = state.filters.number;
+
+      if (state.filters.number) {
+        const target = Number.parseInt(state.filters.number, 10);
+        if (Number.isFinite(target) && state.ticketIndex.has(target)) {
+          state.selectedNumber = target;
+        }
+      }
+
+      renderAll();
+    }
+
+    function resetFilters() {
+      state.filters.seller = "ALL";
+      state.filters.number = "";
+      dom.sellerFilter.value = "ALL";
+      dom.numberFilter.value = "";
+      renderAll();
+    }
+
+    function bindEvents() {
+      dom.buyBtn.addEventListener("click", () => {
+        if (dom.paymentSection) {
+          dom.paymentSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+
+      dom.reloadBtn.addEventListener("click", () => {
+        loadDashboardData();
+      });
+
+      dom.sellerFilter.addEventListener("change", applyFilters);
+      dom.numberFilter.addEventListener("input", applyFilters);
+      dom.clearFiltersBtn.addEventListener("click", resetFilters);
+    }
+
+    bindEvents();
+    seedEmptyTickets();
+    renderAll();
+    loadDashboardData();
+  </script>
+</body>
+</html>

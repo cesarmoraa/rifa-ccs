@@ -1,0 +1,261 @@
+.admin-shell,
+.login-shell {
+  width: min(1500px, calc(100vw - 24px));
+}
+
+.admin-hero {
+  grid-template-columns: 1fr;
+}
+
+.admin-hero-actions {
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  justify-content: end;
+}
+
+.admin-toolbar {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search-field {
+  min-width: 0;
+}
+
+.filter-field {
+  max-width: 280px;
+}
+
+.stats-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(157, 196, 225, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.stat-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 4px;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 2rem;
+}
+
+.admin-layout,
+.admin-secondary-column,
+.reservation-list,
+.reservation-card,
+.reservation-meta,
+.reservation-actions,
+.events-list,
+.event-card {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-ticket-grid {
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+}
+
+.reservation-card,
+.event-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(157, 196, 225, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.reservation-card-head,
+.event-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.reservation-card h3,
+.event-card h3 {
+  margin: 0;
+  font-size: 1.55rem;
+  line-height: 0.95;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(157, 196, 225, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.status-pill::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.status-held::before {
+  background: var(--held);
+}
+
+.status-reserved_pending_payment::before {
+  background: var(--pending);
+}
+
+.status-paid_confirmed::before {
+  background: var(--paid);
+}
+
+.status-released::before,
+.status-expired::before {
+  background: var(--available);
+}
+
+.status-conflict::before {
+  background: var(--conflict);
+}
+
+.reservation-meta {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.reservation-meta div {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(157, 196, 225, 0.12);
+}
+
+.reservation-meta span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.reservation-meta strong {
+  display: block;
+  margin-top: 6px;
+}
+
+.reservation-actions {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.button-danger {
+  min-height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 108, 127, 0.22);
+  color: #ffd8df;
+  background: rgba(255, 108, 127, 0.1);
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.button-neutral {
+  min-height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(157, 196, 225, 0.18);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.button-warning {
+  min-height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(239, 193, 79, 0.22);
+  color: #fff0c3;
+  background: rgba(239, 193, 79, 0.1);
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.button-danger:hover,
+.button-neutral:hover,
+.button-warning:hover {
+  transform: translateY(-1px);
+}
+
+.event-card p {
+  margin: 8px 0 0;
+  color: var(--muted-strong);
+}
+
+.empty-admin {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px dashed rgba(157, 196, 225, 0.18);
+  color: var(--muted);
+}
+
+.admin-login-body {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+}
+
+.login-shell {
+  padding: 20px 0;
+}
+
+.login-panel {
+  max-width: 460px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.login-logo {
+  margin: 0 auto 8px;
+}
+
+@media (min-width: 920px) {
+  .admin-toolbar {
+    grid-template-columns: minmax(0, 1fr) 280px auto;
+    align-items: end;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .admin-layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
+    align-items: start;
+  }
+}

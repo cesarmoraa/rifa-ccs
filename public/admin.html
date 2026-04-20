@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel Admin CCS</title>
+    <meta name="theme-color" content="#07131f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/app.css" />
+    <link rel="stylesheet" href="/admin.css" />
+  </head>
+  <body>
+    <div class="page-shell admin-shell">
+      <header class="hero-card admin-hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Admin operativo</div>
+          <div class="brand-lockup">
+            <img class="brand-logo" src="/assets/logo_ccs.png" alt="CCS" />
+            <div>
+              <h1>PANEL ADMINISTRATIVO SOLANGE</h1>
+              <p class="hero-subtitle">
+                Confirmación de pagos, bloqueos activos, liberaciones manuales y conflictos
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-actions admin-hero-actions">
+          <a class="button-secondary compact" href="/">Volver al panel público</a>
+          <button id="logout-button" class="button-primary compact">Cerrar sesión</button>
+        </div>
+      </header>
+
+      <section class="panel admin-toolbar">
+        <label class="field search-field">
+          <span>Buscar por número, comprador o teléfono</span>
+          <input id="search-input" type="search" placeholder="Ej: 045, Juan Pérez, +569..." />
+        </label>
+        <label class="field filter-field">
+          <span>Filtrar por estado</span>
+          <select id="status-filter">
+            <option value="all">Todos</option>
+            <option value="held">Bloqueado temporalmente</option>
+            <option value="reserved_pending_payment">Pendiente de pago</option>
+            <option value="paid_confirmed">Pagado confirmado</option>
+            <option value="released">Liberado</option>
+            <option value="expired">Expirado</option>
+            <option value="conflict">Conflicto</option>
+          </select>
+        </label>
+        <button id="admin-refresh-button" class="button-secondary compact">Actualizar</button>
+      </section>
+
+      <section class="stats-grid" id="stats-grid"></section>
+
+      <section class="admin-layout">
+        <div class="panel">
+          <div class="section-header">
+            <div>
+              <span class="section-kicker">Estado global</span>
+              <h2>Números de la rifa</h2>
+            </div>
+          </div>
+          <div id="admin-ticket-grid" class="ticket-grid admin-ticket-grid"></div>
+        </div>
+
+        <div class="admin-secondary-column">
+          <section class="panel">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">Reservas</span>
+                <h2>Reservas activas e historial</h2>
+              </div>
+            </div>
+            <div id="admin-feedback" class="feedback-box hidden"></div>
+            <div id="reservation-list" class="reservation-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">Historial</span>
+                <h2>Eventos recientes</h2>
+              </div>
+            </div>
+            <div id="events-list" class="events-list"></div>
+          </section>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/admin.js"></script>
+  </body>
+</html>

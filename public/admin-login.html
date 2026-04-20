@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Rifa CCS</title>
+    <meta name="theme-color" content="#07131f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/app.css" />
+    <link rel="stylesheet" href="/admin.css" />
+  </head>
+  <body class="admin-login-body">
+    <main class="login-shell">
+      <section class="panel login-panel">
+        <img class="brand-logo login-logo" src="/assets/logo_ccs.png" alt="CCS" />
+        <span class="section-kicker">Acceso privado</span>
+        <h1>Panel administrativo Solange</h1>
+        <p class="hero-note">
+          Desde aquí puedes confirmar pagos, liberar números, marcar conflictos y revisar
+          el historial de eventos de la rifa.
+        </p>
+
+        <form id="admin-login-form" class="form-stack">
+          <label class="field">
+            <span>Clave admin</span>
+            <input id="admin-password" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="button-primary" type="submit">Ingresar al panel</button>
+        </form>
+
+        <div id="login-feedback" class="feedback-box hidden"></div>
+      </section>
+    </main>
+
+    <script type="module">
+      const form = document.getElementById("admin-login-form");
+      const feedback = document.getElementById("login-feedback");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        feedback.classList.add("hidden");
+
+        const password = document.getElementById("admin-password").value.trim();
+        const response = await fetch("/api/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password })
+        });
+        const payload = await response.json();
+
+        if (!response.ok || !payload.ok) {
+          feedback.textContent = payload.message || "No fue posible iniciar sesión.";
+          feedback.className = "feedback-box error";
+          return;
+        }
+
+        window.location.href = "/admin";
+      });
+    </script>
+  </body>
+</html>

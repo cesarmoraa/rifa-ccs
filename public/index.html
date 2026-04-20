@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rifa Oficial CCS</title>
+    <meta
+      name="description"
+      content="Reserva real de números para la rifa oficial del Ciclo Club Santiago."
+    />
+    <meta name="theme-color" content="#07131f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">Rifa oficial CCS</div>
+          <div class="brand-lockup">
+            <img class="brand-logo" src="/assets/logo_ccs.png" alt="Ciclo Club Santiago" />
+            <div>
+              <h1>RIFA OFICIAL CICLO CLUB SANTIAGO</h1>
+              <p class="hero-subtitle">
+                Valor por número: $10.000 · Pago solo por transferencia bancaria
+              </p>
+            </div>
+          </div>
+          <p class="hero-note">
+            Los vendedores registran reservas. Solo Solange confirma pagos. Cuando
+            confirmes tu reserva, los números quedan bloqueados en la base de datos por
+            30 minutos para evitar duplicados.
+          </p>
+          <div class="hero-actions">
+            <a class="button-primary" href="#tickets-panel">Reservar números</a>
+            <a class="button-secondary" href="/admin/login">Ingreso admin Solange</a>
+          </div>
+        </div>
+
+        <div class="hero-aside">
+          <div class="metric-card">
+            <span class="metric-label">Números totales</span>
+            <strong id="metric-total">300</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Disponibles ahora</span>
+            <strong id="metric-available">-</strong>
+          </div>
+          <div class="metric-card emphasis">
+            <span class="metric-label">Pago confirmado</span>
+            <strong id="metric-paid">-</strong>
+          </div>
+        </div>
+      </header>
+
+      <section id="reservation-banner" class="floating-banner hidden" aria-live="polite">
+        <div>
+          <p class="banner-label">Reserva activa</p>
+          <h2 id="banner-title">Tus números están bloqueados temporalmente</h2>
+          <p id="banner-copy">
+            Si no realizas la transferencia y el pago no es validado dentro del plazo,
+            volverán a quedar disponibles.
+          </p>
+        </div>
+        <div class="banner-timer-wrap">
+          <span class="banner-timer-label">Tiempo restante</span>
+          <strong id="banner-timer">--:--</strong>
+        </div>
+      </section>
+
+      <main class="content-grid" id="tickets-panel">
+        <section class="panel panel-main">
+          <div class="section-header">
+            <div>
+              <span class="section-kicker">Panel público</span>
+              <h2>Mapa 001–300</h2>
+            </div>
+            <button id="refresh-button" class="button-secondary compact">Actualizar estado</button>
+          </div>
+
+          <div class="legend-grid">
+            <div class="legend-item"><span class="legend-dot available"></span>Disponible</div>
+            <div class="legend-item"><span class="legend-dot held"></span>Bloqueado temporalmente</div>
+            <div class="legend-item"><span class="legend-dot pending"></span>Reservado pendiente de pago</div>
+            <div class="legend-item"><span class="legend-dot paid"></span>Pagado confirmado</div>
+            <div class="legend-item"><span class="legend-dot conflict"></span>Conflicto</div>
+          </div>
+
+          <div id="feedback-box" class="feedback-box hidden"></div>
+
+          <div id="ticket-grid" class="ticket-grid" aria-live="polite"></div>
+        </section>
+
+        <aside class="sidebar-stack">
+          <section class="panel summary-panel">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">Selección múltiple</span>
+                <h2>Tus números</h2>
+              </div>
+              <button id="clear-selection-button" class="text-button">Limpiar</button>
+            </div>
+
+            <div id="selected-empty" class="empty-state">
+              Toca uno o varios números disponibles para armar tu reserva.
+            </div>
+            <div id="selected-list" class="selected-list"></div>
+
+            <div class="summary-totals">
+              <div>
+                <span>Cantidad</span>
+                <strong id="selected-count">0</strong>
+              </div>
+              <div>
+                <span>Total</span>
+                <strong id="selected-total">$0</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">Reserva real</span>
+                <h2>Datos del comprador</h2>
+              </div>
+            </div>
+
+            <p class="panel-warning">
+              Tus números quedarán bloqueados por 30 minutos. Si no realizas la
+              transferencia y el pago no es validado dentro de ese plazo, volverán a
+              quedar disponibles.
+            </p>
+
+            <form id="reservation-form" class="form-stack">
+              <label class="field">
+                <span>Nombre comprador</span>
+                <input id="buyer-name" name="buyerName" type="text" required maxlength="120" />
+              </label>
+              <label class="field">
+                <span>Teléfono</span>
+                <input id="buyer-phone" name="buyerPhone" type="tel" required maxlength="40" />
+              </label>
+              <label class="field">
+                <span>Correo opcional</span>
+                <input id="buyer-email" name="buyerEmail" type="email" maxlength="120" />
+              </label>
+              <label class="field">
+                <span>Observación opcional</span>
+                <textarea id="buyer-notes" name="notes" rows="3" maxlength="280"></textarea>
+              </label>
+              <button id="submit-reservation-button" class="button-primary" type="submit">
+                Confirmar reserva y bloquear números
+              </button>
+            </form>
+          </section>
+
+          <section class="panel payment-panel">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">Transferencia bancaria</span>
+                <h2>Datos de pago</h2>
+              </div>
+            </div>
+
+            <dl class="bank-grid">
+              <div><dt>Titular</dt><dd>Ciclo Club Santiago</dd></div>
+              <div><dt>RUT</dt><dd>65.039.640-5</dd></div>
+              <div><dt>Banco</dt><dd>Banco BCI</dd></div>
+              <div><dt>Tipo de cuenta</dt><dd>Cuenta Corriente</dd></div>
+              <div><dt>Número de cuenta</dt><dd>86488155</dd></div>
+              <div><dt>Correo</dt><dd>contacto@cicloclub.cl</dd></div>
+              <div><dt>Tesorería</dt><dd>tesorero@cicloclub.cl</dd></div>
+              <div><dt>WhatsApp Solange</dt><dd>+56 9 9847 6783</dd></div>
+            </dl>
+
+            <div class="transfer-note">
+              <strong>Instrucción de pago</strong>
+              <p>
+                En el comentario de la transferencia indicar: número(s) + nombre comprador.
+              </p>
+              <code id="transfer-example">Rifa 045-046-047 Juan Pérez</code>
+            </div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

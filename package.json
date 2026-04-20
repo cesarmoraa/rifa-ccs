@@ -1,0 +1,11 @@
+{
+  "name": "rifa-ccs-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mini app real para la rifa del Ciclo Club Santiago con reservas concurrentes y admin operativo.",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  }
+}
