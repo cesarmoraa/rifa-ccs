@@ -110,7 +110,7 @@ async function handleReservationSubmit(event) {
     state.selectedNumbers.clear();
 
     showFeedback(
-      "Reserva creada correctamente. Tus números quedaron bloqueados por 30 minutos.",
+      "Reserva creada correctamente. Tus números quedaron bloqueados por 1 día.",
       "success"
     );
 
