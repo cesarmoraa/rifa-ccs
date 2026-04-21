@@ -169,7 +169,11 @@ function buildReservationActions(reservation) {
     actions.push({ type: "mark-pending", label: "Marcar pendiente", className: "button-warning" });
   }
 
-  if (reservation.status === "held" || reservation.status === "reserved_pending_payment") {
+  if (
+    reservation.status === "held" ||
+    reservation.status === "reserved_pending_payment" ||
+    reservation.status === "conflict"
+  ) {
     actions.push({ type: "confirm-payment", label: "Confirmar pago", className: "button-primary compact" });
     actions.push({ type: "release", label: "Liberar números", className: "button-danger" });
   }
